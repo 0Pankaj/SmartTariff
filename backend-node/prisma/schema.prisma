@@ -1,0 +1,190 @@
+// ============================================================================
+// PROPOSED MIGRATION SCHEMA (Phase 1 Database Analysis)
+// SmartTariff: SQLite ➔ PostgreSQL Migration
+// Target Framework: Node.js + Express.js + Prisma ORM
+// 
+// IMPORTANT:
+// This file is a proposed schema design. Do not apply migrations or connect
+// to PostgreSQL until Phase 2 is approved.
+// ============================================================================
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  customer
+  admin
+}
+
+// ----------------------------------------------------------------------------
+// Model: User (Table: users)
+// Source: SQLite 'users' (21 records)
+// ----------------------------------------------------------------------------
+model User {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(100)
+  email           String            @unique(map: "ix_users_email") @db.VarChar(255)
+  password        String            @db.VarChar(255)
+  phone           String?           @default("") @db.VarChar(20)
+  role            Role              @default(customer)
+  avatar          String?           @db.VarChar(500)
+  isActive        Boolean           @default(true) @map("is_active")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+
+  profile         CustomerProfile?
+  usages          Usage[]
+  recommendations Recommendation[]
+  feedbacks       Feedback[]
+
+  @@map("users")
+}
+
+// ----------------------------------------------------------------------------
+// Model: CustomerProfile (Table: customer_profiles)
+// Source: SQLite 'customer_profiles' (20 records)
+// ----------------------------------------------------------------------------
+model CustomerProfile {
+  id                  Int         @id @default(autoincrement())
+  userId              Int         @unique(map: "ix_customer_profiles_user_id") @map("user_id")
+  currentPlanId       Int?        @map("current_plan_id")
+  monthlyBudget       Float?      @default(500) @map("monthly_budget")
+  minimumData         Float?      @default(10) @map("minimum_data")
+  minimumCallMinutes  Float?      @default(500) @map("minimum_call_minutes")
+  minimumSms          Float?      @default(100) @map("minimum_sms")
+  preferredDuration   String?     @default("28") @map("preferred_duration") @db.VarChar(50)
+  requires5G          Boolean?    @default(false) @map("requires_5g")
+  preferredOperator   String?     @default("") @map("preferred_operator") @db.VarChar(50)
+  createdAt           DateTime?   @default(now()) @map("created_at")
+  updatedAt           DateTime?   @updatedAt @map("updated_at")
+
+  user                User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currentPlan         TariffPlan? @relation(fields: [currentPlanId], references: [id], onDelete: SetNull)
+
+  @@map("customer_profiles")
+}
+
+// ----------------------------------------------------------------------------
+// Model: TariffPlan (Table: tariff_plans)
+// Source: SQLite 'tariff_plans' (20 records)
+// ----------------------------------------------------------------------------
+model TariffPlan {
+  id                  Int                   @id @default(autoincrement())
+  planCode            String?               @map("plan_code") @db.VarChar(50)
+  name                String                @db.VarChar(150)
+  operator            String?               @default("") @db.VarChar(50)
+  category            String?               @default("Standard") @db.VarChar(50)
+  price               Float
+  monthlyEquivalent   Float?                @map("monthly_equivalent")
+  durationMonths      Int?                  @default(1) @map("duration_months")
+  validity            Int                   // Validity in days (e.g. 28, 30, 90, 365)
+  dataLimit           Float?                @map("data_limit") // In GB, null = unlimited
+  callMinutes         Float?                @map("call_minutes") // In minutes, null = unlimited
+  smsLimit            Float?                @map("sms_limit") // Count, null = unlimited
+  offerType           String?               @default("Standalone") @map("offer_type") @db.VarChar(50)
+  individualCost      Float?                @map("individual_cost")
+  discountInr         Float?                @default(0.0) @map("discount_inr")
+  discountPercent     Float?                @default(0.0) @map("discount_percent")
+  fiveG               Boolean?              @default(false) @map("five_g")
+  description         String?               @default("") @db.Text
+  benefits            String?               @default("[]") @db.Text // Serialized JSON array for backward compatibility
+  image               String?               @db.VarChar(500)
+  popularity          Int?                  @default(0)
+  isActive            Boolean?              @default(true) @map("is_active")
+  createdAt           DateTime?             @default(now()) @map("created_at")
+  updatedAt           DateTime?             @updatedAt @map("updated_at")
+
+  profiles            CustomerProfile[]
+  recommendationPlans RecommendationPlan[]
+
+  @@index([isActive], name: "ix_tariff_plans_is_active")
+  @@map("tariff_plans")
+}
+
+// ----------------------------------------------------------------------------
+// Model: Usage (Table: usages)
+// Source: SQLite 'usages' (73 records)
+// ----------------------------------------------------------------------------
+model Usage {
+  id                  Int         @id @default(autoincrement())
+  customerId          Int         @map("customer_id")
+  dataUsage           Float       @map("data_usage")
+  callMinutes         Float       @map("call_minutes")
+  smsCount            Float       @map("sms_count")
+  numberOfCalls       Int?        @default(0) @map("number_of_calls")
+  averageCallDuration Float?      @default(0) @map("average_call_duration")
+  month               String      @db.VarChar(7) // Format: YYYY-MM
+  createdAt           DateTime?   @default(now()) @map("created_at")
+  updatedAt           DateTime?   @updatedAt @map("updated_at")
+
+  customer            User        @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId], name: "ix_usages_customer_id")
+  @@map("usages")
+}
+
+// ----------------------------------------------------------------------------
+// Model: Recommendation (Table: recommendations)
+// Source: SQLite 'recommendations' (17 records)
+// ----------------------------------------------------------------------------
+model Recommendation {
+  id             Int                  @id @default(autoincrement())
+  customerId     Int                  @map("customer_id")
+  inputSnapshot  String?              @default("{}") @map("input_snapshot") @db.Text // Serialized JSON snapshot
+  generatedBy    String?              @default("rule-based") @map("generated_by") @db.VarChar(20)
+  generatedAt    DateTime?            @default(now()) @map("generated_at")
+  createdAt      DateTime?            @default(now()) @map("created_at")
+  updatedAt      DateTime?            @updatedAt @map("updated_at")
+
+  customer       User                 @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  plans          RecommendationPlan[]
+  feedbacks      Feedback[]
+
+  @@index([customerId], name: "ix_recommendations_customer_id")
+  @@map("recommendations")
+}
+
+// ----------------------------------------------------------------------------
+// Model: RecommendationPlan (Table: recommendation_plans)
+// Source: SQLite 'recommendation_plans' (51 records)
+// ----------------------------------------------------------------------------
+model RecommendationPlan {
+  id               Int            @id @default(autoincrement())
+  recommendationId Int            @map("recommendation_id")
+  planId           Int            @map("plan_id")
+  rank             Int
+  score            Float
+  reasons          String?        @default("[]") @db.Text // Serialized JSON array of explainability strings
+
+  recommendation   Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+  plan             TariffPlan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([recommendationId], name: "ix_recommendation_plans_recommendation_id")
+  @@map("recommendation_plans")
+}
+
+// ----------------------------------------------------------------------------
+// Model: Feedback (Table: feedbacks)
+// Source: SQLite 'feedbacks' (11 records)
+// ----------------------------------------------------------------------------
+model Feedback {
+  id               Int            @id @default(autoincrement())
+  customerId       Int            @map("customer_id")
+  recommendationId Int            @map("recommendation_id")
+  rating           Int            // 1-5 rating scale
+  comment          String?        @default("") @db.VarChar(1000)
+  createdAt        DateTime?      @default(now()) @map("created_at")
+  updatedAt        DateTime?      @updatedAt @map("updated_at")
+
+  customer         User           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  recommendation   Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+
+  @@index([customerId], name: "ix_feedbacks_customer_id")
+  @@map("feedbacks")
+}

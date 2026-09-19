@@ -1,0 +1,277 @@
+{
+  "model_version": "SmartTariff V4.3 (size-controlled)",
+  "algorithm": "RandomForestRegressor",
+  "feature_set_used": "fit_only",
+  "features": [
+    "data_per_month_gb",
+    "sms_per_month",
+    "monthly_equivalent_inr",
+    "duration_months",
+    "discount_percent",
+    "data_coverage_ratio",
+    "sms_coverage_ratio",
+    "data_waste_ratio",
+    "sms_waste_ratio",
+    "price_to_budget_ratio",
+    "duration_match"
+  ],
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 10,
+    "min_samples_leaf": 6
+  },
+  "size_control": {
+    "target_model_size_mb": 480,
+    "actual_model_size_mb": 8.25,
+    "joblib_compress_level": 3
+  },
+  "training": {
+    "customers": 30000,
+    "customers_per_plan": 1500,
+    "plans": 20,
+    "interactions": 600000,
+    "train_customers": 24000,
+    "test_customers": 6000
+  },
+  "evaluation": {
+    "mae": 0.999300578519254,
+    "rmse": 1.4934016859066306,
+    "r2": 0.9977023676931521,
+    "top1_accuracy": 93.81666666666668,
+    "top3_hit_rate": 99.96666666666667,
+    "avg_top3_overlap": 2.908166666666667
+  },
+  "alternative_hgb_model": {
+    "size_mb": 0.42,
+    "evaluation": {
+      "mae": 0.11719604234492027,
+      "rmse": 0.20568483741244117,
+      "r2": 0.9999564155258931,
+      "top1_accuracy": 99.16666666666667,
+      "top3_hit_rate": 100.0,
+      "avg_top3_overlap": 2.9821666666666666
+    }
+  },
+  "plans": [
+    {
+      "plan_id": "P01",
+      "plan_name": "Basic Start",
+      "category": "Basic",
+      "duration_months": 1,
+      "total_price_inr": 199,
+      "monthly_equivalent_inr": 199.0,
+      "data_per_month_gb": 2,
+      "sms_per_month": 50,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P02",
+      "plan_name": "Talk Max",
+      "category": "Caller",
+      "duration_months": 1,
+      "total_price_inr": 299,
+      "monthly_equivalent_inr": 299.0,
+      "data_per_month_gb": 8,
+      "sms_per_month": 150,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P03",
+      "plan_name": "Talk Max Plus",
+      "category": "Caller+",
+      "duration_months": 1,
+      "total_price_inr": 349,
+      "monthly_equivalent_inr": 349.0,
+      "data_per_month_gb": 15,
+      "sms_per_month": 200,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P04",
+      "plan_name": "Light Connect",
+      "category": "Light",
+      "duration_months": 1,
+      "total_price_inr": 349,
+      "monthly_equivalent_inr": 349.0,
+      "data_per_month_gb": 28,
+      "sms_per_month": 150,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P05",
+      "plan_name": "Smart Daily",
+      "category": "Standard",
+      "duration_months": 1,
+      "total_price_inr": 370,
+      "monthly_equivalent_inr": 370.0,
+      "data_per_month_gb": 45,
+      "sms_per_month": 100,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P06",
+      "plan_name": "Smart Plus",
+      "category": "Standard+",
+      "duration_months": 1,
+      "total_price_inr": 420,
+      "monthly_equivalent_inr": 420.0,
+      "data_per_month_gb": 60,
+      "sms_per_month": 150,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P07",
+      "plan_name": "Stream 60",
+      "category": "Streamer",
+      "duration_months": 1,
+      "total_price_inr": 450,
+      "monthly_equivalent_inr": 450.0,
+      "data_per_month_gb": 100,
+      "sms_per_month": 100,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P08",
+      "plan_name": "Stream 100",
+      "category": "Streamer+",
+      "duration_months": 1,
+      "total_price_inr": 499,
+      "monthly_equivalent_inr": 499.0,
+      "data_per_month_gb": 150,
+      "sms_per_month": 150,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P09",
+      "plan_name": "Premium Pro",
+      "category": "Premium",
+      "duration_months": 1,
+      "total_price_inr": 549,
+      "monthly_equivalent_inr": 549.0,
+      "data_per_month_gb": 200,
+      "sms_per_month": 500,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P10",
+      "plan_name": "Premium Max",
+      "category": "Premium+",
+      "duration_months": 1,
+      "total_price_inr": 649,
+      "monthly_equivalent_inr": 649.0,
+      "data_per_month_gb": 250,
+      "sms_per_month": 500,
+      "discount_percent": 0.0
+    },
+    {
+      "plan_id": "P11",
+      "plan_name": "Basic Saver 3M",
+      "category": "Basic Bundle",
+      "duration_months": 3,
+      "total_price_inr": 549,
+      "monthly_equivalent_inr": 183.0,
+      "data_per_month_gb": 2,
+      "sms_per_month": 50,
+      "discount_percent": 8.0
+    },
+    {
+      "plan_id": "P12",
+      "plan_name": "Talk Max Saver 3M",
+      "category": "Caller Bundle",
+      "duration_months": 3,
+      "total_price_inr": 799,
+      "monthly_equivalent_inr": 266.33,
+      "data_per_month_gb": 8,
+      "sms_per_month": 150,
+      "discount_percent": 10.9
+    },
+    {
+      "plan_id": "P13",
+      "plan_name": "Light Connect Saver 3M",
+      "category": "Light Bundle",
+      "duration_months": 3,
+      "total_price_inr": 899,
+      "monthly_equivalent_inr": 299.67,
+      "data_per_month_gb": 28,
+      "sms_per_month": 150,
+      "discount_percent": 14.1
+    },
+    {
+      "plan_id": "P14",
+      "plan_name": "Smart Plus Saver 3M",
+      "category": "Standard+ Bundle",
+      "duration_months": 3,
+      "total_price_inr": 1099,
+      "monthly_equivalent_inr": 366.33,
+      "data_per_month_gb": 60,
+      "sms_per_month": 150,
+      "discount_percent": 12.8
+    },
+    {
+      "plan_id": "P15",
+      "plan_name": "Stream 100 Saver 3M",
+      "category": "Streamer+ Bundle",
+      "duration_months": 3,
+      "total_price_inr": 1299,
+      "monthly_equivalent_inr": 433.0,
+      "data_per_month_gb": 150,
+      "sms_per_month": 150,
+      "discount_percent": 13.2
+    },
+    {
+      "plan_id": "P16",
+      "plan_name": "Basic Saver Annual",
+      "category": "Basic Annual",
+      "duration_months": 12,
+      "total_price_inr": 1999,
+      "monthly_equivalent_inr": 166.58,
+      "data_per_month_gb": 2,
+      "sms_per_month": 50,
+      "discount_percent": 16.3
+    },
+    {
+      "plan_id": "P17",
+      "plan_name": "Talk Max Annual",
+      "category": "Caller Annual",
+      "duration_months": 12,
+      "total_price_inr": 2999,
+      "monthly_equivalent_inr": 249.92,
+      "data_per_month_gb": 8,
+      "sms_per_month": 150,
+      "discount_percent": 16.4
+    },
+    {
+      "plan_id": "P18",
+      "plan_name": "Light Connect Annual",
+      "category": "Light Annual",
+      "duration_months": 12,
+      "total_price_inr": 3499,
+      "monthly_equivalent_inr": 291.58,
+      "data_per_month_gb": 28,
+      "sms_per_month": 150,
+      "discount_percent": 16.5
+    },
+    {
+      "plan_id": "P19",
+      "plan_name": "Smart Plus Annual",
+      "category": "Standard+ Annual",
+      "duration_months": 12,
+      "total_price_inr": 4199,
+      "monthly_equivalent_inr": 349.92,
+      "data_per_month_gb": 60,
+      "sms_per_month": 150,
+      "discount_percent": 16.7
+    },
+    {
+      "plan_id": "P20",
+      "plan_name": "Stream 100 Annual",
+      "category": "Streamer+ Annual",
+      "duration_months": 12,
+      "total_price_inr": 4999,
+      "monthly_equivalent_inr": 416.58,
+      "data_per_month_gb": 150,
+      "sms_per_month": 150,
+      "discount_percent": 16.5
+    }
+  ]
+}

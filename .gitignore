@@ -1,0 +1,44 @@
+﻿# Environment variables
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+**/node_modules/
+venv/
+.venv/
+**/venv/
+**/.venv/
+
+# Build artifacts
+dist/
+build/
+**/dist/
+**/build/
+
+# Coverage
+coverage/
+**/coverage/
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Databases & Backups
+*.db
+*.sqlite
+*.sqlite3
+backups/
+**/backups/
+archives/
+**/archives/
+
