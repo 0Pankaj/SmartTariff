@@ -30,7 +30,7 @@ function setRefreshCookie(res, token) {
   res.cookie("refreshToken", token, {
     httpOnly: true,
     secure: config.isProduction,
-    sameSite: config.isProduction ? "strict" : "lax",
+    sameSite: config.isProduction ? "none" : "lax",
     maxAge,
     path: "/",
   });
@@ -40,7 +40,7 @@ function clearRefreshCookie(res) {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: config.isProduction,
-    sameSite: config.isProduction ? "strict" : "lax",
+    sameSite: config.isProduction ? "none" : "lax",
     path: "/",
   });
 }

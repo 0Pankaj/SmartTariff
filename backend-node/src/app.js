@@ -11,6 +11,7 @@ const apiV1Router = require("./routes");
 const { notFoundHandler, errorHandler } = require("./middleware/errorMiddleware");
 
 const app = express();
+app.set("trust proxy", 1);
 
 // ── Security Headers ─────────────────────────────────────────────────────────
 app.use(
