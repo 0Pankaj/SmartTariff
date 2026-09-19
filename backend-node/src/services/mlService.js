@@ -8,7 +8,8 @@ function loadModelConfig() {
   if (cachedConfig) return cachedConfig;
   const possiblePaths = [
     path.join(__dirname, "../../../smarttariff_v4_3_config.json"),
-    path.join(__dirname, "../../../smartTariff-backend-main/smarttariff_v4_3_config.json"),
+    path.join(__dirname, "../../../ml-model/smarttariff_v4_3_config.json"),
+    path.join(process.cwd(), "ml-model/smarttariff_v4_3_config.json"),
     path.join(process.cwd(), "smarttariff_v4_3_config.json"),
   ];
 

@@ -5,8 +5,8 @@ Standalone Python FastAPI microservice that loads the existing SmartTariff V4.3 
 ## Service Ports & Environment
 - **Default Port**: `8000`
 - **Host**: `0.0.0.0`
-- **Model Path**: `../smartTariff-backend-main/smarttariff_v4_3_random_forest.pkl`
-- **Config Path**: `../smartTariff-backend-main/smarttariff_v4_3_config.json`
+- **Model Path**: `../ml-model/smarttariff_v4_3_random_forest.pkl`
+- **Config Path**: `../ml-model/smarttariff_v4_3_config.json`
 
 ## Endpoints
 

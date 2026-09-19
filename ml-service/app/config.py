@@ -38,12 +38,12 @@ class Settings:
 
     MODEL_PATH: Path = resolve_path(
         "MODEL_PATH",
-        "smartTariff-backend-main/smarttariff_v4_3_random_forest.pkl"
+        "ml-model/smarttariff_v4_3_random_forest.pkl"
     )
 
     CONFIG_PATH: Path = resolve_path(
         "CONFIG_PATH",
-        "smartTariff-backend-main/smarttariff_v4_3_config.json"
+        "ml-model/smarttariff_v4_3_config.json"
     )
 
 
